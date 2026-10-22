@@ -1,0 +1,985 @@
+<!-- Top Bar -->
+<header class="top-nav-wrapper">
+  <div class="container top-nav-inner">
+    <a href="#" class="brand-logo" aria-label="Fox English Brazil Home">
+      <img src="logo.png" alt="Fox English Brazil - Tech Communication" class="logo-image" />
+    </a>
+
+    <nav class="nav-links-desktop" aria-label="Navegação principal">
+      <a href="#sobre" class="nav-item">Quem Somos</a>
+      <a href="#pilares" class="nav-item">Pilares Tech</a>
+      <a href="#servicos" class="nav-item">Serviços & Aulas</a>
+      <button type="button" class="nav-item nav-schedule-btn" (click)="openScheduleModal('all', $event)">
+        📅 Horários das Aulas
+      </button>
+      <a href="#trilhas" class="nav-item">Trilhas</a>
+      <a href="#simulador" class="nav-item">Simulador de Carreira</a>
+      <a href="#faq" class="nav-item">Dúvidas</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button type="button" class="btn-ghost" (click)="openStudentPortalModal($event)">
+        <span class="icon-user"></span>
+        Log In
+      </button>
+      <a href="#contato" class="btn-primary-glow">
+        Começar Agora
+      </a>
+      <button
+        type="button"
+        class="mobile-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-label="Abrir Menu"
+      >
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  @if (menuOpen) {
+    <div class="mobile-drawer" (click)="closeMenu()">
+      <div class="mobile-drawer-content" (click)="$event.stopPropagation()">
+        <div class="mobile-drawer-header">
+          <img src="logo.png" alt="Fox English Brazil" class="drawer-logo" />
+          <button type="button" class="btn-close" (click)="closeMenu()">✕</button>
+        </div>
+        <nav class="mobile-nav-list">
+          <a href="#sobre" (click)="closeMenu()">Quem Somos</a>
+          <a href="#pilares" (click)="closeMenu()">Pilares Tech</a>
+          <a href="#servicos" (click)="closeMenu()">Serviços & Aulas</a>
+          <a href="javascript:void(0)" (click)="openScheduleModal('all', $event)">📅 Horários das Aulas</a>
+          <a href="#trilhas" (click)="closeMenu()">Trilhas de Aprendizado</a>
+          <a href="#simulador" (click)="closeMenu()">Simulador de Carreira</a>
+          <a href="#faq" (click)="closeMenu()">Perguntas Frequentes</a>
+          <a href="#contato" class="mobile-cta-btn" (click)="closeMenu()">Começar Agora</a>
+          <button type="button" class="mobile-login-btn" (click)="openStudentPortalModal($event)">
+            Área do Aluno (Log In)
+          </button>
+        </nav>
+      </div>
+    </div>
+  }
+</header>
+
+<main>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-grid-pattern"></div>
+    <!-- Wireframe da Raposa em Laranja no Fundo (Inclinado em Diagonal) -->
+    <div class="hero-fox-wireframe" aria-hidden="true">
+      <img src="fox-wireframe-orange.png" alt="" class="fox-wireframe-img" />
+    </div>
+
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="badge-tech">
+          <span class="pulse-dot"></span>
+          TECH COMMUNICATION • CARREIRA INTERNACIONAL
+        </div>
+        
+        <h1 class="hero-title">
+          Inglês para quem quer ir <span class="text-gradient">mais longe na carreira tech.</span>
+        </h1>
+
+        <p class="hero-lead">
+          Desenvolvemos o inglês profissional para tecnólogos, engenheiros de software e líderes da área, preparando você para reuniões com gringos, entrevistas globais e code reviews com total autoridade.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contato" class="btn-primary-large">
+            Começar agora
+            <span class="arrow-right">→</span>
+          </a>
+          <button type="button" class="btn-secondary-large" (click)="openDiagnosticModal($event)">
+            Fazer Diagnóstico Tech Gratuito
+          </button>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-item">
+            <span class="metric-value">+94%</span>
+            <span class="metric-label">Aprovação em Entrevistas Internacionais</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <span class="metric-value">100%</span>
+            <span class="metric-label">Foco no Ecossistema e Rotina de TI</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <span class="metric-value">USD / EUR</span>
+            <span class="metric-label">Preparação para Salários em Moeda Forte</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Interactive Card Showcase -->
+      <div class="hero-visual" (mouseenter)="pauseCarousel()" (mouseleave)="resumeCarousel()">
+        <div class="showcase-card">
+          <div class="showcase-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title">live-stream :: fox-tech-english.ts</span>
+            <span class="status-live">ONLINE</span>
+          </div>
+
+          <div class="showcase-body">
+            @for (service of services; track service.id; let idx = $index) {
+              @if (activeHeroSlide() === idx) {
+                <div class="slide-item active-slide">
+                  <div class="slide-image-wrapper">
+                    <img [src]="service.image" [alt]="service.title" class="slide-image" />
+                    <span class="slide-badge">{{ service.badge }}</span>
+                  </div>
+                  <div class="slide-info">
+                    <span class="slide-category">{{ service.category }} • {{ service.duration }}</span>
+                    <h3 class="slide-title">{{ service.title }}</h3>
+                    <p class="slide-desc">{{ service.subtitle }}</p>
+                    <div class="slide-action">
+                      <button type="button" class="btn-slide-action" (click)="openServiceBookingModal(service)">
+                        Agendar Sessão
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+
+          <!-- Showcase Navigation Dots -->
+          <div class="showcase-footer">
+            <button type="button" class="carousel-arrow" (click)="prevHeroSlide()" aria-label="Slide anterior">‹</button>
+            <div class="carousel-bullets">
+              @for (item of services; track item.id; let i = $index) {
+                <button
+                  type="button"
+                  class="bullet"
+                  [class.active]="activeHeroSlide() === i"
+                  (click)="setHeroSlide(i)"
+                  [attr.aria-label]="'Ir para slide ' + (i + 1)"
+                ></button>
+              }
+            </div>
+            <button type="button" class="carousel-arrow" (click)="nextHeroSlide()" aria-label="Próximo slide">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card de Destaque: Confira o Horário das Aulas -->
+  <section class="schedule-banner-section">
+    <div class="container">
+      <div class="schedule-banner-card" (click)="openScheduleModal('all', $event)">
+        <div class="schedule-banner-left">
+          <div class="schedule-banner-badge">
+            <span class="live-dot-pulse"></span>
+            GRADE DE AULAS DISPONÍVEIS
+          </div>
+          <h2 class="schedule-banner-title">
+            Confira o <span class="text-gradient">Horário das Aulas</span>
+          </h2>
+          <p class="schedule-banner-subtitle">
+            Horários flexíveis pensados para quem atua em tecnologia: manhãs, horários de almoço, noites e finais de semana.
+          </p>
+          <div class="schedule-pills-row">
+            <span class="schedule-pill" (click)="$event.stopPropagation(); openScheduleModal('particular', $event)">
+              👤 Aulas Particulares (VIP 1-on-1)
+            </span>
+            <span class="schedule-pill" (click)="$event.stopPropagation(); openScheduleModal('conversacao', $event)">
+              🗣️ Aulas de Conversação Tech
+            </span>
+            <span class="schedule-pill" (click)="$event.stopPropagation(); openScheduleModal('song', $event)">
+              🎵 Aulas de Song & Pronúncia
+            </span>
+          </div>
+        </div>
+
+        <div class="schedule-banner-right">
+          <button type="button" class="btn-open-schedule-banner">
+            Ver Horários Completos
+            <span class="arrow-right">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quem Somos / About Section -->
+  <section id="sobre" class="section about-section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-card">
+          <img src="hero-ai.jpg" alt="Profissional tech comunicando em inglês" class="about-img-main" />
+          <div class="about-floating-card">
+            <div class="floating-icon">🦊</div>
+            <div>
+              <strong>Fox English Brazil</strong>
+              <p>Comunicação sem barreiras para desenvolvedores globais.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-text-content">
+          <div class="section-tag">QUEM SOMOS</div>
+          <h2 class="section-title">
+            Transformamos o inglês em uma <span class="text-orange">ferramenta estratégica de carreira.</span>
+          </h2>
+          <p class="about-text-highlight">
+            Na <strong>Fox English Brazil</strong>, transformamos o inglês em uma ferramenta estratégica de carreira. Nossa missão é capacitar profissionais de tecnologia para navegarem com excelência no mercado nacional e internacional, focando em situações reais do ambiente de trabalho, preparando-os para reuniões, code reviews e entrevistas internacionais com total segurança e fluência técnica.
+          </p>
+
+          <div class="about-bullets">
+            <div class="about-bullet-item">
+              <span class="bullet-check">✓</span>
+              <div>
+                <strong>Metodologia Prática e Direta ao Ponto</strong>
+                <p>Chega de enrolação com gramática abstrata de escola tradicional. Aqui o foco é a fala real do desenvolvedor.</p>
+              </div>
+            </div>
+            <div class="about-bullet-item">
+              <span class="bullet-check">✓</span>
+              <div>
+                <strong>Mentores com Vivência de Mercado</strong>
+                <p>Professores e consultores experientes no vocabulário de engenharia, arquitetura em nuvem e startups.</p>
+              </div>
+            </div>
+            <div class="about-bullet-item">
+              <span class="bullet-check">✓</span>
+              <div>
+                <strong>Simulação de Situações Reais de TI</strong>
+                <p>Treine cenários de incidentes ao vivo, apresentações técnicas para CTOs e negociações de salário em dólar.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-cta-row">
+            <a href="#contato" class="btn-primary-glow">Fale Conosco</a>
+            <a href="#servicos" class="btn-outline">Ver Nossos Serviços</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tecnologia e Carreira: 6 Pilares -->
+  <section id="pilares" class="section pillars-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">TECNOLOGIA E CARREIRA</div>
+        <h2 class="section-title">Diferenciais que Destravam a sua Carreira Global</h2>
+        <p class="section-subtitle">
+          Criamos um ecossistema projetado especificamente para as demandas da rotina dos profissionais de tecnologia.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        @for (pillar of pillars; track pillar.number) {
+          <div class="pillar-card">
+            <div class="pillar-card-top">
+              <span class="pillar-num">{{ pillar.number }}</span>
+              <span class="pillar-tag">{{ pillar.highlightTag }}</span>
+            </div>
+            
+            <div class="pillar-image-box">
+              <img [src]="pillar.image" [alt]="pillar.title" class="pillar-img" />
+            </div>
+
+            <div class="pillar-content">
+              <h3 class="pillar-title">{{ pillar.title }}</h3>
+              <p class="pillar-desc">{{ pillar.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Serviços & Agendamento Online -->
+  <section id="servicos" class="section services-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">AGENDAMENTO & SERVIÇOS ONLINE</div>
+        <h2 class="section-title">Programas Especializados de Alta Performance</h2>
+        <p class="section-subtitle">
+          Escolha o formato que atende exatamente o seu momento profissional e agende sua sessão de imersão.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        @for (service of services; track service.id) {
+          <div class="service-card">
+            <div class="service-img-wrapper">
+              <img [src]="service.image" [alt]="service.title" class="service-img" />
+              <span class="service-chip">{{ service.badge }}</span>
+              <span class="service-duration">{{ service.duration }}</span>
+            </div>
+
+            <div class="service-card-body">
+              <div class="service-cat">{{ service.category }}</div>
+              <h3 class="service-title">{{ service.title }}</h3>
+              <p class="service-desc">{{ service.description }}</p>
+
+              <div class="service-outcomes">
+                <h4>O que você desenvolve:</h4>
+                <ul>
+                  @for (outcome of service.learningOutcomes; track outcome) {
+                    <li>
+                      <span class="bullet-arrow">▸</span>
+                      {{ outcome }}
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <div class="service-target">
+                <strong>Público-alvo:</strong> {{ service.targetAudience }}
+              </div>
+
+              <div class="service-card-footer">
+                <div class="service-price">
+                  <span class="price-label">Investimento</span>
+                  <span class="price-val">{{ service.priceTag }}</span>
+                </div>
+                <button type="button" class="btn-primary-action" (click)="openServiceBookingModal(service)">
+                  Agendar Online
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Trilhas de Aprendizado -->
+  <section id="trilhas" class="section programs-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">TRILHAS FORMATIVAS</div>
+        <h2 class="section-title">Evolução Contínua em Tech English</h2>
+        <p class="section-subtitle">
+          Da comunicação operacional diária até a redação executiva e defesa de grandes projetos internacionais.
+        </p>
+      </div>
+
+      <div class="programs-grid">
+        @for (prog of programs; track prog.id) {
+          <div class="program-card">
+            <div class="program-card-header">
+              <span class="program-badge">{{ prog.badge }}</span>
+              <span class="program-level">{{ prog.level }}</span>
+            </div>
+
+            <h3 class="program-title">{{ prog.title }}</h3>
+            <p class="program-summary">{{ prog.summary }}</p>
+
+            <div class="program-features">
+              <strong>Destaques da Trilha:</strong>
+              <ul>
+                @for (feat of prog.features; track feat) {
+                  <li>
+                    <span class="check-icon">✓</span>
+                    {{ feat }}
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <div class="program-card-action">
+              <a href="#contato" class="btn-program-enroll">
+                Solicitar Detalhes do Programa
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Simulador / Diagnóstico de Nível e Carreira Tech -->
+  <section id="simulador" class="section simulator-section">
+    <div class="container">
+      <div class="simulator-card">
+        <div class="simulator-header">
+          <div class="section-tag">INTERATIVO</div>
+          <h2 class="section-title">Diagnóstico de Inglês para o seu Momento de Carreira</h2>
+          <p class="section-subtitle">
+            Selecione a sua posição atual na área de tecnologia para visualizar o plano de ação recomendado pela Fox English.
+          </p>
+        </div>
+
+        <div class="role-selector-tabs">
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="selectedRole() === 'junior'"
+            (click)="setDiagnosticRole('junior')"
+          >
+            Dev Júnior / Transição
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="selectedRole() === 'midSenior'"
+            (click)="setDiagnosticRole('midSenior')"
+          >
+            Pleno / Sênior (Vagas Gringas)
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="selectedRole() === 'leadArch'"
+            (click)="setDiagnosticRole('leadArch')"
+          >
+            Tech Lead / Arquiteto
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="selectedRole() === 'qaDevops'"
+            (click)="setDiagnosticRole('qaDevops')"
+          >
+            QA / DevOps / SRE / Dados
+          </button>
+        </div>
+
+        <div class="diagnostic-result-panel">
+          <div class="result-top">
+            <div>
+              <span class="result-badge">PLANO PERSONALIZADO RECOMENDADO</span>
+              <h3 class="result-title">{{ diagnostic().title }}</h3>
+            </div>
+            <div class="time-estimate">
+              <span class="time-label">Tempo Médio Recomendado:</span>
+              <span class="time-val">{{ diagnostic().suggestedDuration }}</span>
+            </div>
+          </div>
+
+          <div class="result-grid">
+            <div class="result-box">
+              <span class="box-icon">🎯</span>
+              <h4>Foco Principal de Treinamento</h4>
+              <p>{{ diagnostic().targetFocus }}</p>
+            </div>
+            <div class="result-box">
+              <span class="box-icon">🚀</span>
+              <h4>Impacto Real na Carreira</h4>
+              <p>{{ diagnostic().careerImpact }}</p>
+            </div>
+            <div class="result-box">
+              <span class="box-icon">📚</span>
+              <h4>Programa Mais Indicado</h4>
+              <p><strong>{{ diagnostic().recommendedService }}</strong></p>
+            </div>
+          </div>
+
+          <div class="result-skills-box">
+            <h4>Habilidades Prioritárias a Desenvolver:</h4>
+            <div class="skills-tags">
+              @for (skill of diagnostic().keySkills; track skill) {
+                <span class="skill-tag">⚡ {{ skill }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="diagnostic-actions">
+            <button type="button" class="btn-primary-large" (click)="openDiagnosticModal($event)">
+              Quero Validar Meu Diagnóstico com um Mentor (Gratuito)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulário Oficial de Contato & Inscrição -->
+  <section id="contato" class="section contact-section">
+    <div class="contact-fox-wireframe" aria-hidden="true">
+      <img src="fox-wireframe-orange.png" alt="" class="fox-wireframe-img" />
+    </div>
+    <div class="container">
+      <div class="contact-card-wrapper">
+        <div class="contact-info-col">
+          <div class="section-tag">COMEÇAR AGORA</div>
+          <h2 class="contact-title">
+            Domine o inglês para sua <span class="text-orange">carreira internacional.</span>
+          </h2>
+          <p class="contact-desc">
+            Prepare-se para reuniões, entrevistas e projetos internacionais com o suporte especializado da <strong>Fox English Brazil</strong>.
+          </p>
+
+          <div class="contact-details">
+            <div class="contact-detail-item">
+              <span class="detail-icon">✉️</span>
+              <div>
+                <span class="detail-label">E-mail Direto</span>
+                <a [href]="'mailto:' + contactEmail" class="detail-val">{{ contactEmail }}</a>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <span class="detail-icon">💬</span>
+              <div>
+                <span class="detail-label">WhatsApp de Atendimento & Campanhas</span>
+                <a [href]="whatsappFloatingUrl" target="_blank" rel="noopener noreferrer" class="detail-val text-orange">
+                  {{ contactPhoneDisplay }}
+                </a>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <span class="detail-icon">🌐</span>
+              <div>
+                <span class="detail-label">Modalidade</span>
+                <span class="detail-val">100% Online e Ao Vivo (Horários Flexíveis)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-quote">
+            <p>"O melhor momento para dominar o inglês técnico foi há um ano. O segundo melhor momento é agora."</p>
+          </div>
+        </div>
+
+        <div class="contact-form-col">
+          <form class="contact-form" (submit)="onContactSubmit($event)">
+            <h3 class="form-title">Solicitar Informações</h3>
+            <p class="form-subtitle">Preencha o formulário abaixo e receba atendimento personalizado.</p>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="contact-nome">Nome *</label>
+                <input type="text" id="contact-nome" placeholder="Seu nome" required />
+              </div>
+              <div class="form-group">
+                <label for="contact-sobrenome">Sobrenome *</label>
+                <input type="text" id="contact-sobrenome" placeholder="Seu sobrenome" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email">E-mail Profissional *</label>
+              <input type="email" id="contact-email" placeholder="seuemail@tech.com" required />
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="contact-tech-area">Área de Tecnologia *</label>
+                <select id="contact-tech-area" required>
+                  <option value="" disabled selected>Selecione sua área</option>
+                  <option value="Software / Engenharia">Software / Engenharia</option>
+                  <option value="TI / Infraestrutura">TI / Infraestrutura</option>
+                  <option value="DevOps / Cloud / SRE">DevOps / Cloud / SRE</option>
+                  <option value="QA / Qualidade de Software">QA / Qualidade de Software</option>
+                  <option value="Dados / Business Intelligence / IA">Dados / BI / IA</option>
+                  <option value="Produto / Gestão / Scrum">Produto / Scrum / Gestão</option>
+                  <option value="Outra área de Tecnologia">Outra área de Tecnologia</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="contact-level">Nível Atual de Inglês</label>
+                <select id="contact-level">
+                  <option value="Básico (Leio pouco, travo na fala)">Básico (Leio pouco, travo na fala)</option>
+                  <option value="Intermediário (Leio bem, travo na fala)" selected>Intermediário (Leio bem, travo na fala)</option>
+                  <option value="Avançado (Quero refinar vocabulário tech)">Avançado (Quero refinar vocabulário tech)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-mensagem">Mensagem / Objetivos de Carreira</label>
+              <textarea
+                id="contact-mensagem"
+                rows="4"
+                placeholder="Conte sobre seus desafios atuais: reuniões na empresa atual, preparação para entrevistas com gringos, etc."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit-main">
+              Solicitar Informações
+              <span class="btn-arrow">→</span>
+            </button>
+            <span class="privacy-notice">
+              🔒 Seus dados estão seguros e serão utilizados apenas para retorno da equipe Fox English Brazil.
+            </span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section faq-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">TIRE SUAS DÚVIDAS</div>
+        <h2 class="section-title">Perguntas Frequentes</h2>
+        <p class="section-subtitle">
+          Tudo o que você precisa saber sobre as mentorias e metodologia da Fox English Brazil.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        @for (item of faqs; track item.question; let idx = $index) {
+          <div class="faq-card" [class.open]="activeFaqIndex() === idx">
+            <button type="button" class="faq-question" (click)="toggleFaq(idx)">
+              <span>{{ item.question }}</span>
+              <span class="faq-toggle-icon">{{ activeFaqIndex() === idx ? '−' : '+' }}</span>
+            </button>
+            @if (activeFaqIndex() === idx) {
+              <div class="faq-answer">
+                <p>{{ item.answer }}</p>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="main-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <img src="logo.png" alt="Fox English Brazil" class="footer-logo" />
+        <p class="footer-tagline">
+          Transformando o inglês em uma ferramenta estratégica de carreira para desenvolvedores e líderes de tecnologia.
+        </p>
+        <div class="footer-contacts">
+          <p>📧 <a [href]="'mailto:' + contactEmail">{{ contactEmail }}</a></p>
+          <p>💬 WhatsApp: <a [href]="whatsappFloatingUrl" target="_blank" rel="noopener noreferrer">{{ contactPhoneDisplay }}</a></p>
+        </div>
+      </div>
+
+      <div class="footer-nav-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#sobre">Quem Somos</a></li>
+          <li><a href="#pilares">Pilares Tech</a></li>
+          <li><a href="#servicos">Serviços Online</a></li>
+          <li><a href="#trilhas">Trilhas de Aprendizado</a></li>
+          <li><a href="#simulador">Simulador de Carreira</a></li>
+          <li><a href="#faq">Perguntas Frequentes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-services-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Inglês para Reuniões</a></li>
+          <li><a href="#servicos">Inglês para Tecnologia</a></li>
+          <li><a href="#servicos">Preparação para Entrevista</a></li>
+          <li><a href="#trilhas">Mastering Tech English</a></li>
+          <li><a href="#contato">Mentoria Individual VIP</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-portal-col">
+        <h4>Área do Aluno</h4>
+        <p>Acesse suas aulas, materiais gravados e agendamento de sessões.</p>
+        <button type="button" class="btn-portal" (click)="openStudentPortalModal($event)">
+          Acessar Portal do Aluno
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Fox English Brazil. Todos os direitos reservados.</p>
+      <div class="footer-badges">
+        <span class="badge-tag">DAILY MEETINGS</span>
+        <span class="badge-tag">CODE REVIEWS</span>
+        <span class="badge-tag">TECH INTERVIEWS</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Button -->
+<a
+  [href]="whatsappFloatingUrl"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="whatsapp-float-btn"
+  aria-label="Falar com a Fox English no WhatsApp"
+>
+  <span class="wa-icon">💬</span>
+  <span class="wa-tooltip">Fale Conosco no WhatsApp</span>
+</a>
+
+<!-- Modal 1: Diagnóstico de Carreira Tech -->
+@if (activeModal() === 'diagnostic') {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">DIAGNÓSTICO GRATUITO</span>
+          <h3 class="modal-title">Avaliação de Inglês & Carreira Tech</h3>
+        </div>
+        <button type="button" class="modal-btn-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">
+          Um de nossos mentores especialistas em tecnologia irá avaliar seu perfil e indicar o roteiro ideal para destravar sua carreira.
+        </p>
+
+        <form class="modal-form" (submit)="onDiagnosticSubmit($event)">
+          <div class="form-group">
+            <label for="diag-nome">Nome Completo *</label>
+            <input type="text" id="diag-nome" placeholder="Seu nome completo" required />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="diag-whatsapp">WhatsApp *</label>
+              <input type="tel" id="diag-whatsapp" placeholder="(DDD) 99999-9999" required />
+            </div>
+            <div class="form-group">
+              <label for="diag-email">E-mail *</label>
+              <input type="email" id="diag-email" placeholder="seu@email.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="diag-objetivo">Qual é o seu maior objetivo hoje?</label>
+            <select id="diag-objetivo" required>
+              <option value="Conquistar uma vaga remota nos EUA/Europa" selected>Conquistar uma vaga remota nos EUA/Europa</option>
+              <option value="Participar de Dailies e Code Reviews sem travar">Participar de Dailies e Code Reviews sem travar</option>
+              <option value="Melhorar comunicação executiva e apresentações">Melhorar comunicação executiva e apresentações</option>
+              <option value="Aprender vocabulário técnico de programação">Aprender vocabulário técnico de programação</option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="btn-modal-confirm">Enviar e Abrir WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal 2: Agendamento de Serviço Específico -->
+@if (activeModal() === 'serviceBooking') {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">{{ selectedServiceForModal()?.category }}</span>
+          <h3 class="modal-title">{{ selectedServiceForModal()?.title }}</h3>
+        </div>
+        <button type="button" class="modal-btn-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">{{ selectedServiceForModal()?.subtitle }}</p>
+
+        <form class="modal-form" (submit)="onServiceBookingSubmit($event)">
+          <div class="form-group">
+            <label for="book-nome">Nome Completo *</label>
+            <input type="text" id="book-nome" placeholder="Seu nome completo" required />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="book-whatsapp">WhatsApp *</label>
+              <input type="tel" id="book-whatsapp" placeholder="(DDD) 99999-9999" required />
+            </div>
+            <div class="form-group">
+              <label for="book-email">E-mail *</label>
+              <input type="email" id="book-email" placeholder="seu@email.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="book-horario">Melhor período para contato/aulas</label>
+            <select id="book-horario">
+              <option value="Manhã (08h às 12h)">Manhã (08h às 12h)</option>
+              <option value="Horário de Almoço (12h às 14h)">Horário de Almoço (12h às 14h)</option>
+              <option value="Tarde (14h às 18h)">Tarde (14h às 18h)</option>
+              <option value="Noite (18h às 21h)" selected>Noite (18h às 21h)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="book-obs">Observações / Dúvidas</label>
+            <textarea id="book-obs" rows="2" placeholder="Gostaria de agendar para a próxima semana..."></textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="btn-modal-confirm">Confirmar Agendamento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal 3: Portal do Aluno (Log In) -->
+@if (activeModal() === 'studentPortal') {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-dialog modal-dialog-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">ÁREA DO ALUNO</span>
+          <h3 class="modal-title">Portal Fox English</h3>
+        </div>
+        <button type="button" class="modal-btn-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">
+          Acesse a plataforma de mentorias, materiais de apoio e agendamentos com sua conta de estudante.
+        </p>
+
+        <form class="modal-form" (submit)="$event.preventDefault(); showNotification({ title: 'Acesso Solicitado', message: 'Verifique suas credenciais enviadas ao seu e-mail de matrícula.', type: 'orange' }); closeModal();">
+          <div class="form-group">
+            <label for="portal-email">E-mail Cadastrado</label>
+            <input type="email" id="portal-email" placeholder="aluno@tech.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="portal-pass">Senha</label>
+            <input type="password" id="portal-pass" placeholder="••••••••" required />
+          </div>
+
+          <div class="portal-extra-links">
+            <a href="#contato" (click)="closeModal()">Esqueceu a senha? Fale com o suporte</a>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" (click)="closeModal()">Voltar</button>
+            <button type="submit" class="btn-modal-confirm">Entrar no Portal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal 4: Horários das Aulas (Aulas Particulares, Conversação e Song) -->
+@if (activeModal() === 'scheduleModal') {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-dialog modal-dialog-lg" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">GRADE DE HORÁRIOS</span>
+          <h3 class="modal-title">Horários das Aulas Fox English</h3>
+        </div>
+        <button type="button" class="modal-btn-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body modal-schedule-body">
+        <p class="modal-desc">
+          Consulte os horários disponíveis para <strong>Aulas Particulares VIP</strong>, <strong>Clubes de Conversação</strong> e <strong>Aulas de Song</strong>. Vagas abertas para turmas online ao vivo.
+        </p>
+
+        <!-- Filtros de Categoria -->
+        <div class="schedule-filter-tabs">
+          <button
+            type="button"
+            class="sched-tab-btn"
+            [class.active]="selectedScheduleCategory() === 'all'"
+            (click)="setScheduleCategory('all')"
+          >
+            Todas as Aulas
+          </button>
+          <button
+            type="button"
+            class="sched-tab-btn"
+            [class.active]="selectedScheduleCategory() === 'particular'"
+            (click)="setScheduleCategory('particular')"
+          >
+            👤 Aulas Particulares
+          </button>
+          <button
+            type="button"
+            class="sched-tab-btn"
+            [class.active]="selectedScheduleCategory() === 'conversacao'"
+            (click)="setScheduleCategory('conversacao')"
+          >
+            🗣️ Conversação Tech
+          </button>
+          <button
+            type="button"
+            class="sched-tab-btn"
+            [class.active]="selectedScheduleCategory() === 'song'"
+            (click)="setScheduleCategory('song')"
+          >
+            🎵 Aulas de Song
+          </button>
+        </div>
+
+        <!-- Lista de Cards de Horários -->
+        <div class="schedule-grid">
+          @for (slot of filteredSchedules(); track slot.id) {
+            <div class="schedule-item-card">
+              <div class="schedule-card-top">
+                <span class="schedule-cat-badge">{{ slot.categoryLabel }}</span>
+                <span [class]="'schedule-status-chip chip-' + slot.badgeType">{{ slot.badge }}</span>
+              </div>
+
+              <h4 class="schedule-item-title">{{ slot.title }}</h4>
+              <p class="schedule-item-desc">{{ slot.description }}</p>
+
+              <div class="schedule-meta-list">
+                <div class="sched-meta-row">
+                  <span class="sched-label">📅 Dias:</span>
+                  <span class="sched-val">{{ slot.days }}</span>
+                </div>
+                <div class="sched-meta-row">
+                  <span class="sched-label">⏰ Horário:</span>
+                  <span class="sched-val sched-time-highlight">{{ slot.time }}</span>
+                </div>
+                <div class="sched-meta-row">
+                  <span class="sched-label">⏳ Duração:</span>
+                  <span class="sched-val">{{ slot.duration }}</span>
+                </div>
+                <div class="sched-meta-row">
+                  <span class="sched-label">🎯 Nível:</span>
+                  <span class="sched-val">{{ slot.level }}</span>
+                </div>
+              </div>
+
+              <div class="schedule-card-bottom">
+                <button type="button" class="btn-book-slot" (click)="bookScheduleSlot(slot)">
+                  Reservar este Horário (WhatsApp)
+                  <span class="arrow-right">→</span>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Toast Notification -->
+@if (toast(); as t) {
+  <div class="toast-card" [class]="'toast-' + t.type">
+    <div class="toast-content">
+      <div class="toast-title-row">
+        <span class="toast-icon">🦊</span>
+        <strong>{{ t.title }}</strong>
+      </div>
+      <p class="toast-message">{{ t.message }}</p>
+      @if (t.protocol) {
+        <div class="toast-protocol">Protocolo: <code>{{ t.protocol }}</code></div>
+      }
+    </div>
+    <button type="button" class="toast-close" (click)="dismissToast()" aria-label="Fechar aviso">✕</button>
+  </div>
+}
